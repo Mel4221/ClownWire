@@ -1,0 +1,96 @@
+                            GNU GENERAL PUBLIC LICENSE
+                           Version 3, 29 June 2007
+
+Copyright (C) <year>  <fullname>
+Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.
+
+                             Preamble
+
+The GNU General Public License is a free, copyleft license for software and other kinds of works. The licenses for most software are designed to take away your freedom to share and change it. By contrast, the GNU General Public License is intended to guarantee your freedom to share and change free software—to make sure the software is free for all its users.
+
+When we speak of free software, we are referring to freedom, not price. To understand the concept, you should think of "free" as in "free speech," not as in "free beer". The GNU General Public License (GPL) is intended to guarantee your freedom to share and change free software—by ensuring that the software is free for all its users. More precisely, the GPL grants you the following freedoms:
+
+  1. The freedom to run the program as you wish, for any purpose.
+  2. The freedom to study how the program works, and change it to make it do what you wish.
+     Access to the source code is a precondition for this.
+  3. The freedom to redistribute copies of the program so you can help others.
+  4. The freedom to distribute copies of your modified versions to others. By doing this you can give the whole community a chance to benefit from your changes. Access to the source code is a precondition for this.
+
+To protect your rights, we need to prevent others from denying you these freedoms or asking you to surrender the rights. Therefore, you have certain responsibilities if you distribute copies of the software, or if you modify it:
+
+  1. You must ensure that everyone else also has the freedom to modify and distribute the software.
+  2. You must pass on the source code, or make it available.
+  3. You must keep intact all notices stating that you have modified the software.
+  4. You must not add any further restrictions to the rights granted by the GPL.
+
+Finally, every program is threatened constantly by software patents. We wish to avoid the danger that redistributors of a program will individually obtain patent licenses, effectively limiting the users' freedom to copy and modify the software. To prevent this, we have made it clear that any patent rights granted by the program’s author(s) are also covered by the GPL.
+
+The GPL is designed to be used for software, but it can also be applied to other works, such as documentation, art, or music. The terms of the GPL are compatible with the terms of the Creative Commons Attribution Share-Alike license (CC BY-SA), allowing a work to be licensed under both licenses simultaneously.
+
+                             TERMS AND CONDITIONS
+
+0. Definitions.
+
+   "This License" refers to version 3 of the GNU General Public License.
+
+   "The Program" refers to any copyrightable work licensed under this License. Each licensee is addressed as "you".
+
+   "Copyright holder" means the individual or entity that holds the copyright on the work.
+
+   "Contributor" means any individual or legal entity that distributes the Program in accordance with the terms of this License.
+
+   "You" means the licensee, i.e., the person who uses, modifies, or distributes the Program.
+
+1. Source Code.
+
+   The source code for a program is the preferred form for making modifications to it. For a work to be covered by this License, the program's source code must be made available. If you modify the Program, you must make the modified source code available under the terms of this License.
+
+2. Basic Permissions.
+
+   - You may copy, modify, and distribute the Program, provided that you fulfill the conditions in this License.
+   - You must ensure that any modified versions of the program remain free, as well as all its documentation and any modified code.
+
+3. Copyleft.
+
+   - This is the key concept of the GPL. Any modified versions of the software must be distributed under the same GPL license. In other words, you must grant the same freedoms to others that were granted to you.
+   - This includes distributing the source code for any modifications you make to the program.
+  
+4. Conveying Modified Versions.
+
+   - If you distribute modified versions of the Program, you must pass on the same freedoms you received. You must also provide access to the modified source code or make it available.
+  
+5. No Warranty.
+
+   - The Program is provided "as is", without any warranty. There is no guarantee of merchantability or fitness for any particular purpose.
+
+6. Termination.
+
+   - Your rights under the GPL will be terminated if you violate the terms of the license.
+  
+7. Acceptance.
+
+   - By modifying, copying, or distributing the Program (or any work based on it), you accept the terms of this License.
+
+---
+
+### How to Add It to Your Project
+
+To include this in your project, you can simply create a file named **`LICENSE`** or **`LICENSE.txt`** in your repository and paste the full text above. If you'd like, you can customize the year and copyright holder fields at the beginning of the license to match your project.
+
+Example:
+
+```txt
+Copyright (C) 2024 <Your Name or Organization>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
