@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youweb Sync</title>
+     
+    <style>
+        /* Global Styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Container for the entire sync process */
+        .container {
+            text-align: center;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px; /* Increased max width for a better view */
+            box-sizing: border-box;
+        }
+
+        /* Sync icon styling */
+        #sync_svg {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        #sync_svg:hover {
+            transform: scale(1.1);
+        }
+
+        /* Warning message text styling */
+        #warning {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        /* Progress bar container styling */
+        .progress-bar {
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            width: 100%;
+            margin-top: 15px;
+            overflow: hidden;
+            display: none; /* Hidden initially */
+        }
+
+        .progress {
+            background-color: #0075ff;
+            height: 100%;
+            width: 0%; /* Start width at 0% */
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        /* Status text */
+        .status {
+            margin: 15px 0;
+            display: none;
+        }
+
+        #sync_status {
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        /* Links styling (hide them initially) */
+        .links {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+        <div class="container">
+            <p id="warning"></p>
+
+            <svg onclick="Sync()" id="sync_svg" xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 36 36">
+                <path fill="#0075ff" d="M32.84 15.72a1 1 0 1 0-2 .29a13 13 0 0 1 .16 1.93A13 13 0 0 1 8.7 27h5.36a1 1 0 0 0 0-2h-9v9a1 1 0 1 0 2 0v-5.8a15 15 0 0 0 25.78-12.48" class="clr-i-outline clr-i-outline-path-1"/>
+                <path fill="#0075ff" d="M30.06 1A1.05 1.05 0 0 0 29 2v5.83A14.94 14.94 0 0 0 3 17.94a15 15 0 0 0 .2 2.48a1 1 0 0 0 1 .84h.16a1 1 0 0 0 .82-1.15A13 13 0 0 1 5 17.94a13 13 0 0 1 13-13A12.87 12.87 0 0 1 27.44 9h-5.38a1 1 0 0 0 0 2H31V2a1 1 0 0 0-.94-1" class="clr-i-outline clr-i-outline-path-2"/>
+                <path fill="none" d="M0 0h36v36H0z"/>
+            </svg>
+
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+
+            <div class="status">
+                <span id="sync_status">0%</span>
+            </div>
+        </div>
+
+        <div id="links_list">
+            <!-- Sample placeholder for links -->
+            @SongsList
+        </div>
+
+        <script>
+            var interval = null;
+            var timeOut = null;
+            var angle = 0;
+            var link = "";
+            var progress = 0;
+
+            const songs = document.querySelectorAll('#links_list .links');
+            const progressElement = document.querySelector('.progress');
+            const statusElement = document.getElementById('sync_status');
+            const warningElement = document.getElementById("warning");
+
+            const Download = () => {
+                warningElement.innerHTML = "Please wait, this could take a while...<br/><br/>Close this if no songs are being downloaded.";
+                console.log("Download Started...");
+                
+                songs.forEach(item => {
+                    const randomNumber = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;  // Random delay between 1000 and 5000 milliseconds
+                    
+                    setTimeout(() => {
+                        console.log("Clicking: ", item);
+                        item.click();  // Programmatically click the <a> tag
+                    }, randomNumber);  // Delay the click with the random number
+                });
+            };
+
+            const Sync = () => {       
+                angle += 45;  // Increase angle by 45 degrees
+                const svg = document.getElementById('sync_svg');
+                svg.style.transform = `rotate(${angle}deg)`; 
+
+                progress += 1;  // Increment progress
+                if (progress == 100) {
+                    progress = 0;
+                }
+
+                progressElement.style.width = progress + '%';  // Update the progress bar width
+                statusElement.textContent = progress + '%';  // Update the status text
+
+                if (interval == null) {
+                    interval = setInterval(() => {
+                        Sync();
+                    }, 200);  // Run Sync function at intervals
+                    Download();  // Trigger the download function
+                }
+            }
+        </script>
+</body>
+</html>

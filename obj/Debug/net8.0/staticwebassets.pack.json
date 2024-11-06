@@ -1,0 +1,57 @@
+{
+  "Files": [
+    {
+      "Id": "/home/mel/Documents/csharp/UShare/wwwroot/clownwire.html",
+      "PackagePath": "staticwebassets/clownwire.html"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/UShare/wwwroot/download.html",
+      "PackagePath": "staticwebassets/download.html"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/UShare/wwwroot/isync.html",
+      "PackagePath": "staticwebassets/isync.html"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/UShare/wwwroot/notes.html",
+      "PackagePath": "staticwebassets/notes.html"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/UShare/wwwroot/src/js/jszip.js",
+      "PackagePath": "staticwebassets/src/js/jszip.js"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/UShare/wwwroot/src/js/jszip.min.js",
+      "PackagePath": "staticwebassets/src/js/jszip.min.js"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/UShare/wwwroot/sync.html",
+      "PackagePath": "staticwebassets/sync.html"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/UShare/wwwroot/upload.html",
+      "PackagePath": "staticwebassets/upload.html"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/UShare/wwwroot/you.html",
+      "PackagePath": "staticwebassets/you.html"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.UShare.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.UShare.props",
+      "PackagePath": "build\\UShare.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.UShare.props",
+      "PackagePath": "buildMultiTargeting\\UShare.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.UShare.props",
+      "PackagePath": "buildTransitive\\UShare.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

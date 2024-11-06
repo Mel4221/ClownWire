@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clown Wire - Download</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .buttons {
+            margin: 20px 0;
+        }
+
+        /* Center the progress bar */
+        #progressBar {
+            display: none;
+            width: 80%;
+            margin: 20px auto;
+            height: 20px;
+            background-color: #f3f3f3;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #progressBar::-webkit-progress-bar {
+            background-color: #f3f3f3;
+        }
+
+        #progressBar::-webkit-progress-value {
+            background-color: #3498db;
+        }
+
+        #progressBar::-moz-progress-bar {
+            background-color: #3498db;
+        }
+
+        textarea {
+            width: 80%;
+            margin-top: 20px;
+            padding: 10px;
+            resize: none;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            height: 200px;
+            font-family: monospace;
+            color: #333;
+            background-color: #fff;
+        }
+
+        input[type="file"], input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #3498db;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        button:disabled {
+            background-color: #d3d3d3;
+            cursor: not-allowed;
+        }
+
+        .file-list {
+            width: 80%;
+            margin: 20px auto;
+            text-align: left;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            padding: 10px;
+        }
+
+        .file-list label {
+            display: block;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+
+        .file-list input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        #log {
+            display: none;
+        }
+
+        /* Search Bar Styling */
+        .search-bar {
+            width: 80%;
+            margin: 20px auto;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Clown Wire (Download)</h1>
+
+    <div class="buttons">
+        <!-- Search Bar for Filtering -->
+        <input type="text" id="searchBar" class="search-bar" placeholder="Search files..." />
+        
+        <!-- Select All Checkbox -->
+        <label>
+            <input type="checkbox" id="selectAllCheckbox"> Select All
+        </label>
+
+        <div class="file-list" id="fileList">
+            <!-- Dynamic file list will be inserted here -->
+        </div>
+        
+        <button type="button" id="download" disabled>Download Selected Files</button>
+        <button type="button"><a href="@ipaddress/clownwire/upload" id="upload">Upload</a></button>
+        <button type="button" id="note"><a href="@ipaddress/clownwire/notes/">Notes</a></button><br /><br />
+
+    </div>
+
+    <!-- Progress bar -->
+    <progress id="progressBar" value="0" max="100"></progress><br /><br />
+
+    <!-- Log textarea for debug/info -->
+    <textarea id="log" rows="10" cols="50" readonly></textarea>
+
+    <script>
+        // The 'filesFromServer' array will be populated dynamically from the server
+        let filesFromServer = [];
+        var upload = document.getElementById('upload');
+        var note = document.getElementById('note');
+
+
+        async function downloadFile(fileName) {
+            const apiUrl = `@ipaddress/clownwire/download/${fileName}`; // The endpoint URL
+            const url = apiUrl;
+            try {
+                // Fetch the file from the server
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    // Handle failed request
+                    throw new Error(`Failed to fetch file: ${response.statusText}`);
+                }
+
+                // Get the file as a blob
+                const blob = await response.blob();
+                
+                // Create a URL for the blob and create an anchor element to trigger the download
+                const downloadUrl = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = fileName; // Name the file as it is on the server
+                
+                // Trigger the download
+                link.click();
+
+                // Clean up the object URL after download
+                window.URL.revokeObjectURL(downloadUrl);
+            } catch (error) {
+                console.error('Error downloading file:', error);
+            }
+        }
+
+        // This function will fetch the file list from the server
+        async function fetchFileList() {
+            try {
+                const response = await fetch('@ipaddress/clownwire/download/filelist'); // Adjust URL to match your API
+                if (!response.ok) {
+                    throw new Error('Failed to fetch file list');
+                }
+
+                // Parse the JSON response from the server
+                filesFromServer = await response.json();
+
+                // Dynamically populate the file list
+                const fileListDiv = document.getElementById('fileList');
+                fileListDiv.innerHTML = ''; // Clear any existing content
+
+                filesFromServer.forEach((file) => {
+                    const fileItem = document.createElement('label');
+                    fileItem.innerHTML = `
+                        <input type="checkbox" name="file" value="${file.fileName}" class="file-checkbox">
+                        ${file.fileName} (${file.fileSize})
+                    `;
+                    fileListDiv.appendChild(fileItem);
+                });
+
+                // Re-bind the checkbox change event after the list is populated
+                bindCheckboxEvents();
+
+            } catch (error) {
+                console.error('Error fetching file list:', error);
+                log('Failed to load file list from the server.');
+            }
+        }
+
+        // Function to enable or disable the download button based on selected files
+        function bindCheckboxEvents() {
+            const checkboxes = document.querySelectorAll('.file-checkbox');
+            checkboxes.forEach((checkbox) => {
+                checkbox.addEventListener('change', () => {
+                    const selectedFiles = Array.from(checkboxes).filter(checkbox => checkbox.checked);
+                    downloadButton.disabled = selectedFiles.length === 0;
+                    switch(downloadButton.disabled)
+                    {
+                        case true:
+                            downloadButton.textContent = "Download Selected Files";
+                            break;
+                        case false:
+                            downloadButton.textContent = `Download ${selectedFiles.length} File(s)`;
+                            break;
+                    }
+                });
+            });
+        }
+
+        // Add search functionality for filtering the file list
+        const searchBar = document.getElementById('searchBar');
+        searchBar.addEventListener('input', () => {
+            const query = searchBar.value.toLowerCase();
+            const filteredFiles = filesFromServer.filter(file => 
+                file.fileName.toLowerCase().includes(query)
+            );
+
+            // Re-populate the file list with the filtered files
+            const fileListDiv = document.getElementById('fileList');
+            fileListDiv.innerHTML = ''; // Clear the current list
+
+            filteredFiles.forEach((file) => {
+                const fileItem = document.createElement('label');
+                fileItem.innerHTML = `
+                    <input type="checkbox" name="file" value="${file.fileName}" class="file-checkbox">
+                    ${file.fileName} (${file.fileSize})
+                `;
+                fileListDiv.appendChild(fileItem);
+            });
+
+            // Re-bind the checkbox event after filtering
+            bindCheckboxEvents();
+        });
+
+        // Select All checkbox functionality
+        const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+        selectAllCheckbox.addEventListener('change', () => {
+            const checkboxes = document.querySelectorAll('.file-checkbox');
+            checkboxes.forEach((checkbox) => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+
+            // Update the download button text based on selection
+            const selectedFiles = Array.from(checkboxes).filter(checkbox => checkbox.checked);
+            downloadButton.disabled = selectedFiles.length === 0;
+            if (selectedFiles.length > 0) {
+                downloadButton.textContent = `Download ${selectedFiles.length} File(s)`;
+            } else {
+                downloadButton.textContent = "Download Selected Files";
+            }
+        });
+
+        // Download the selected files
+        const downloadButton = document.getElementById('download');
+        downloadButton.addEventListener('click', async () => {
+            downloadButton.disabled = true;
+            upload.disabled = true;
+
+            const selectedFiles = Array.from(document.querySelectorAll('.file-checkbox'))
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value);
+
+            if (selectedFiles.length > 0) {
+                console.log(`Downloading: ${selectedFiles.join(', ')}`);
+                for (let item of selectedFiles) {
+                    await downloadFile(item);
+                }
+            } else {
+                log("No files selected.");
+            }
+        });
+
+        // Log function to update the log box
+        function log(text) {
+            const logBox = document.getElementById("log");
+            logBox.textContent = text + "\n" + logBox.textContent;
+        }
+
+        // Fetch the file list from the server when the page loads
+        window.onload = fetchFileList;
+    </script>
+
+</body>
+</html>
