@@ -465,11 +465,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/mel/Documents/csharp/UShare/UShare.csproj",
-      "projectName": "UShare",
-      "projectPath": "/home/mel/Documents/csharp/UShare/UShare.csproj",
+      "projectUniqueName": "/home/mel/Documents/csharp/ClownWire/ClownWire.csproj",
+      "projectName": "ClownWire",
+      "projectPath": "/home/mel/Documents/csharp/ClownWire/ClownWire.csproj",
       "packagesPath": "/home/mel/.nuget/packages/",
-      "outputPath": "/home/mel/Documents/csharp/UShare/obj/",
+      "outputPath": "/home/mel/Documents/csharp/ClownWire/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/mel/.nuget/NuGet/NuGet.Config"

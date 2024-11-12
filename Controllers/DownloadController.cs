@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using System.IO.Compression;
+using QuickTools.QCore;
+using QuickTools.QIO;   
 
-namespace UShare.Controllers
+namespace ClownWire.Controllers
 {
     [Route("clownwire/[controller]")]
     [ApiController]
@@ -18,8 +20,10 @@ namespace UShare.Controllers
         private static ConcurrentDictionary<string, string> TaskStatus = new ConcurrentDictionary<string, string>();
         private static ConcurrentDictionary<string, string> TaskResult = new ConcurrentDictionary<string, string>();
 
+
+        
         [HttpGet()]
-        public IActionResult Download()
+        public IActionResult Get()
         {
             string html, ip;
             html = System.IO.File.ReadAllText("wwwroot/download.html");
@@ -29,6 +33,9 @@ namespace UShare.Controllers
             return File(buffer, "text/html");
         }
 
+
+
+       
         [HttpGet("isync")]
         public IActionResult ISync()
         {

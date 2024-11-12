@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chunked Video Streaming</title>
+  <style>
+    video {
+      width: 100%;
+      height: auto;
+      max-width: 800px;
+    }
+    #playButton {
+      margin-top: 10px;
+    }   
+    #status {
+      font-size: 24px;
+      font-family: monospace;
+      margin-top: 20px;
+    }
+ 
+  </style>
+</head>
+<body>
+
+  <h1>Chunked Video Streaming Example</h1>
+  <video id="videoElement" controls>
+  </video>
+  <button id="playButton">Play Video</button>
+</br></br></br>
+  <div id="status"></div>  <!-- This is where the spinner will be shown -->
+
+  <script>
+    // Global variables for tracking video state
+    var currentMinute = 0;     // The current chunk's minute
+    var totalMinutes = 0;      // Total minutes of the video (from server header)
+    var minute = 0; 
+    var videoElement = document.getElementById('videoElement');
+    var playButton = document.getElementById('playButton');
+    const baseUrl = "@ipaddress/clownwire/media/stream";  // Update this URL as needed
+    // Variable to control the spinning process
+    var isSpinning = true; 
+
+// Spinner characters
+const spinnerChars = ['\\', '|', '/', '-']; 
+
+
+// Function to show a spinning bar
+function startSpinning() {
+    isSpinning = true; 
+    let i = 0;  // Index to track the spinner character
+    const statusElement = document.getElementById('status');  // The element to display the spinner
+
+    const spinnerInterval = setInterval(() => {
+        // Update the spinner character
+        statusElement.textContent = spinnerChars[i];  // Set the spinner character
+
+        // Move to the next character in the spinner sequence
+        i = (i + 1) % spinnerChars.length;  // Cycle through [\, |, /, -]
+
+        // Check if the spinning should stop
+        if (!isSpinning) {
+            clearInterval(spinnerInterval);  // Stop the spinner when isSpinning is false
+            statusElement.textContent = 'Done!';  // Output 'Done!' after stopping
+        }
+    }, 100);  // Update every 100 milliseconds (adjust as needed)
+}
+
+
+
+
+    // Function to start streaming the video
+    async function streamVideo() {
+      const mediaSource = new MediaSource();
+      videoElement.src = URL.createObjectURL(mediaSource);
+
+      // Wait for the MediaSource to be opened
+      mediaSource.addEventListener('sourceopen', async function () {
+        const sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vp8, vorbis"');
+
+        // Fetch the first chunk of the video and append it to the SourceBuffer
+        await fetchAndAppendVideoChunk(sourceBuffer);
+
+        // Start playing the video once the first chunk is ready
+        //videoElement.play();
+        playButton.textContent = "Play";
+        playButton.disabled = false; 
+        isSpinning = false; 
+
+        // Continue fetching the next chunks as the video plays
+        videoElement.addEventListener('timeupdate', async function () 
+        {
+          mediaSource.duration = minute;
+          /*
+          const currentTime = videoElement.currentTime / 60; // in minutes
+              console.log(`Current Time..: ${currentTime}`);
+          // Check if we need to fetch a new chunk based on the current time
+            if (Math.floor(currentTime) > currentMinute && currentMinute < totalMinutes) {
+            currentMinute = Math.floor(currentTime);
+            //minute++;
+            //await fetchAndAppendVideoChunk(minute, sourceBuffer);
+            }
+            */
+        });
+      });
+    }
+
+    // Function to fetch a video chunk based on the current minute
+    async function fetchAndAppendVideoChunk(sourceBuffer) {
+      try {
+        minute++; 
+        if(minute >= totalMinutes && 
+            totalMinutes != 0)
+        {
+           return;
+        }
+        startSpinning();
+        const url = `${baseUrl}`;  // Assumes video chunks are named by minute, e.g. "video-part-0.mp4"
+        console.log(`Requesting chunk: ${url} for minute: ${minute}`);
+        // Send the request for the current video chunk
+        const response = await fetch(url, 
+        {
+          headers: {
+            'Range': `0-100/100`,
+            'Minute': `${minute}`  // This assumes each chunk is 1 minute of video
+          }
+        });
+
+        // Set the total minutes from the server response header
+        const totalMinutesHeader = response.headers.get('Total-Minutes');
+        
+        
+        if (totalMinutesHeader) {
+          totalMinutes = totalMinutes==0?parseInt(totalMinutesHeader):totalMinutes;
+          console.log('Total video minutes:', totalMinutes);
+        }
+        
+
+        // Check if the response is valid
+        if (response.ok) 
+        {
+          const data = await response.arrayBuffer();
+          await appendToSourceBuffer(sourceBuffer, data);
+          
+           sourceBuffer.duration = minute;  // Update the total available duration in the media source
+
+          await fetchAndAppendVideoChunk(sourceBuffer);
+        } else {
+          console.error('Error fetching video chunk:', response.status, response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching or appending video chunk:', error);
+      }
+    }
+
+    // Function to append the video data to the SourceBuffer and wait until it's done
+    function appendToSourceBuffer(sourceBuffer, data) {
+      return new Promise((resolve, reject) => {
+        sourceBuffer.addEventListener('updateend', () => resolve());
+        sourceBuffer.addEventListener('error', (error) => reject(error));
+        sourceBuffer.appendBuffer(data);
+      });
+    }
+
+    // Event listener for play button
+    playButton.addEventListener('click', function() {
+      if (!videoElement.src) {
+        // Start the video stream when play button is clicked
+  
+        playButton.disabled = true;  // Disable the play button to avoid multiple starts
+        playButton.textContent = 'Video is Playing...';
+      }
+    });
+
+    streamVideo();
+    startSpinning();
+
+
+
+// Example of starting and stopping the spinner
+/*
+// After 5 seconds, stop the spinner (for demo purposes)
+setTimeout(() => {
+    isSpinning = false;  // Set to false to stop the spinner
+}, 5000);
+*/
+  </script>
+
+</body>
+</html>

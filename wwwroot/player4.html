@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MKV to WebM Conversion using FFmpeg.js</title>
+  <style>
+    video {
+      width: 100%;
+      height: auto;
+      max-width: 800px;
+    }
+    #status {
+      font-size: 24px;
+      font-family: monospace;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>MKV to WebM Conversion using FFmpeg.js</h1>
+  <input type="file" id="mkvFileInput" accept=".mkv" />
+  <div id="status">Please upload an MKV file to start conversion.</div>
+  <video id="videoElement" controls></video>
+
+  <script type="module"  src="@ipaddress/clownwire/src/ffmpeg-js.js"></script>
+  <script>
+    // Wait for the DOM to fully load
+    document.addEventListener("DOMContentLoaded", function() {
+      const fileInput = document.getElementById('mkvFileInput');
+      const videoElement = document.getElementById('videoElement');
+      const statusElement = document.getElementById('status');
+
+      // FFmpeg.js setup
+      const ffmpeg = createFFmpeg({ log: true });
+
+      // Event listener for file input
+      fileInput.addEventListener('change', async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          statusElement.textContent = "Converting file...";
+
+          // Load FFmpeg.js (in case it's not already loaded)
+          await ffmpeg.load();
+
+          // Write the MKV file to FFmpeg's virtual file system
+          ffmpeg.FS('writeFile', '@ipaddress/clownwire/src/video.mkv', new Uint8Array(await file.arrayBuffer()));
+
+          // Run the conversion to WebM (you can choose other formats, e.g., MP4)
+          await ffmpeg.run('-i', '@ipaddress/clownwire/src/video.mkv', 'output.webm');
+
+          // Read the converted WebM file from the FFmpeg virtual file system
+          const output = ffmpeg.FS('readFile', 'output.webm');
+
+          // Create a Blob from the WebM file data
+          const videoBlob = new Blob([output.buffer], { type: 'video/webm' });
+
+          // Set the source of the video element to the Blob URL
+          videoElement.src = URL.createObjectURL(videoBlob);
+
+          // Play the video once the conversion is done
+          videoElement.play();
+          statusElement.textContent = "Conversion done! Playing video...";
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

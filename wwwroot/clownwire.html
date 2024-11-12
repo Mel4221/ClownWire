@@ -1,1 +1,36 @@
-working...
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clownwire</title>
+    <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Clownwire</h1>
+            <button id="uploadBtn" onclick="document.getElementById('fileInput').click()">Upload Files</button>
+            <input type="file" id="fileInput" style="display: none;" multiple onchange="updateFileList()">
+        </header>
+        
+       
+        
+        <section id="uploadSection">
+            <div>
+                <p id="uploadStatus">Ready to upload</p>
+                <progress id="progressBar" value="0" max="100" style="width: 100%; display: none;"></progress>
+                <progress id="progressBar2" value="0" max="100" style="width: 100%; display: none;"></progress>
+            </div>
+            <button id="upload" onclick="startUpload()">Upload</button>
+            <section id="fileListSection">
+                <h2>Files</h2>
+                <div id="fileList" class="file-list"></div>
+            </section>
+            <div id="log"></div>
+        </section>
+    </div>
+
+    <script src="src/script.js"></script>
+</body>
+</html>

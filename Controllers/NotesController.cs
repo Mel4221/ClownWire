@@ -4,7 +4,7 @@ using System.IO;
 using System.Text; 
 using System.Threading.Tasks;
 
-namespace UShare.Controllers
+namespace ClownWire.Controllers
 {
     [Route("clownwire/[controller]")]
     [ApiController]

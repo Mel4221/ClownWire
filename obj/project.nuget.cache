@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "a4PrI1NQkuA=",
+  "dgSpecHash": "TxSKVNYpgtY=",
   "success": true,
-  "projectFilePath": "/home/mel/Documents/csharp/UShare/UShare.csproj",
+  "projectFilePath": "/home/mel/Documents/csharp/ClownWire/ClownWire.csproj",
   "expectedPackageFiles": [
     "/home/mel/.nuget/packages/microsoft.aspnetcore.openapi/7.0.5/microsoft.aspnetcore.openapi.7.0.5.nupkg.sha512",
     "/home/mel/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",

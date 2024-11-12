@@ -1,0 +1,46 @@
+Mon Nov 11 09:15:50 PM AST 2024
+
+Today i was thinking that it was best to start writting down the direction that i wanted
+the apis that i have written since they do not have an standard way of working they at 
+least should agree on the way they behave and comunicate.
+
+As a result of needing to stablish an standard on how i work with this apis i think is
+best to write some of the common comunication styles that this apis uses 
+
+File Managment: 
+    on the file Managment pretty mutch all files handle by the api should be under wwwroot/
+    no matter their funtionalitys if it is an static file it should be listed there , i also 
+    will update the html location to be under either an html directory or an static 
+    just for naming porpuses 
+
+
+API TREE: 
+    clownwire/
+        fileName -> this one allow easy access to any file under -> clownwire/src/
+        upload/
+            upload/
+        download/
+            fileName
+        src/
+            fileName
+        player/
+        stream/
+            fileName -> since it needs a file name 
+
+
+Pending plans and implementations: 
+    
+    > Missing Implement an html front end to return a list of files
+        > it would be cool to add the thubnails of the media files
+        > there is a huge need for a songs data base with icons
+    
+    > Missing files resolver to get files either as temp or permanent
+        > this requires a files database to list the files that are availables
+        > directory for input and oupout based on random ids to do not couse issues
+    
+    > Missing the complete implementation of the Notepad
+        > it requires javascript and html work 
+        > the server side is not implemented at all 
+        > requires database either file format or sql which i daubt i will do 
+        > the notepad should have been just a single box with text to be saved with a label
+    

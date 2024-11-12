@@ -1,37 +1,23 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using QuickTools.QCore;
 using System.IO;
 using System.Text; 
 using System.Threading.Tasks;
 
 namespace ClownWire.Controllers
 {
-    [Route("clownwire")]
-    [ApiController]
-    public class clownwireController : Controller
+    [Route("clownwire/[controller]")]
+    [Route("[controller]")]
+    [ApiController]    
+    public class SrcController: ControllerBase
     {
-        private static string _storagePath = Tools.StoragePath;
-
-        [HttpGet()]
-        public IActionResult Get()
-        {
-            string html,ip;
-            html = System.IO.File.ReadAllText("wwwroot/clownwire.html");
-            ip = Tools.GetLocalIPAddress();
-            html = html.Replace("@ipaddress",$"http://{ip}"); 
-            //Console.WriteLine(html);
-            byte[] buffer = Encoding.ASCII.GetBytes(html);
-            // Return the index.html file and set the content type as "text/html"
-            // return File("index.html", "text/html");
-            return File(buffer, "text/html");
-
-        }
-            [HttpGet("{fileName}")]
-     public IActionResult GetFileName(string fileName)
+        [HttpGet("{fileName}")]
+     public IActionResult GetSrc(string fileName)
 {
-    // Get the file content and MIME type
-    string file = Tools.GetFile(fileName);
+       string file = Tools.GetFile(fileName);
     if(!System.IO.File.Exists(file))return NotFound($"{fileName}");
+    // Get the file content and MIME type
     string html = System.IO.File.ReadAllText(file);
     string ip = Tools.GetLocalIPAddress();
     string mimeType = Tools.GetMimeType(fileName);
@@ -53,6 +39,9 @@ namespace ClownWire.Controllers
         return File(buffer, mimeType);
     }
 }
+
+
+
 
     }
 }
