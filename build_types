@@ -1,0 +1,4 @@
+dotnet publish -c Release -r linux-x64 --self-contained true --output ./publish/linux
+dotnet publish -c Release -r win-x64 --self-contained true --output ./publish/windows
+dotnet publish -c Release -r linux-arm --self-contained true --output ./publish/linux-arm
+dotnet publish -c Release -r win-arm --self-contained true --output ./publish/win-arm

@@ -11,6 +11,12 @@ namespace ClownWire.Controllers
     [ApiController]
     public class MediaController : ControllerBase
     {
+
+        [HttpGet]
+        public async Task<IActionResult> Test()
+        {
+            return Ok("This endpoint is not in use currently");
+        }
        /*
         [HttpGet("test")]
         public async Task<IActionResult> Test()
@@ -20,7 +26,7 @@ namespace ClownWire.Controllers
            return Ok($"Stamp: {result} Minutes: {minutes}"); 
         }
         */
-
+/*
         // Web API method to stream video file with CORS headers and partial content support
         [HttpGet("stream")]
         public async Task<IActionResult> Get()
@@ -60,7 +66,7 @@ namespace ClownWire.Controllers
             {
                 return BadRequest("Invalid Range header.");
             }
-            */
+            
 
             // Ensure the file exists
             var mkvFile = new FileInfo(mkv_file);
@@ -77,8 +83,7 @@ namespace ClownWire.Controllers
             {
                 return BadRequest("Start byte is beyond the end of the file.");
             }
-            */
-
+            
             // Set the range end to the file length if it exceeds the file size
            // endByte = (endByte >= totalFileSize) ? totalFileSize - 1 : endByte;
 
@@ -109,6 +114,7 @@ namespace ClownWire.Controllers
             return new EmptyResult(); // End the response
         }
 
+        /*
         // Method to parse the Range header (e.g., "bytes=0-1023")
         private bool TryParseRangeHeader(string rangeHeader, out long startByte, out long endByte)
         {
@@ -145,8 +151,9 @@ namespace ClownWire.Controllers
             return false; // Invalid range
         }
 
+*/
 
-        
+        /*
         // Method to process the video file asynchronously using ffmpeg
         private async Task ProcessMKVAsync(string fileIn,string fileOut,string from , string to)
         {
@@ -172,5 +179,6 @@ namespace ClownWire.Controllers
                 }
             });
         }
+        */
     }
 }

@@ -4,25 +4,25 @@ using System.IO;
 using System.Text; 
 using System.Threading.Tasks;
 
+using QuickTools.QCore;
+
 namespace ClownWire.Controllers
 {
     [Route("clownwire/[controller]")]
     [ApiController]
     public class UploadController : ControllerBase
     {
-        private static string _storagePath = Tools.StoragePath;
+        private static string _storagePath = ServerTools.CloudRootPath;
         [HttpGet()] 
         public IActionResult Get()
         {
-           string html,ip;
-            html = System.IO.File.ReadAllText("wwwroot/upload.html");
-            ip = Tools.GetLocalIPAddress();
-            html = html.Replace("@ipaddress",$"http://{ip}"); 
-            //Console.WriteLine(html);
-            byte[] buffer = Encoding.ASCII.GetBytes(html);
+
+            string mimeType = ServerTools.GetMimeType(this.ControllerContext);
+            IGet.Box($"DEBUGG");
+            byte[] buffer = ServerTools.GetHtmlBuffer(this.ControllerContext);
             // Return the index.html file and set the content type as "text/html"
             // return File("index.html", "text/html");
-            return File(buffer, "text/html");
+            return File(buffer, mimeType);
 
         }
             
@@ -49,8 +49,13 @@ public async Task<IActionResult> UploadFile([FromForm] string text)
     var totalChunks = int.Parse(form["totalChunks"]);
     var fileName = fileChunk.FileName;
 
+
     // Save the chunk to disk with a temporary name
-    var chunkFilePath = Path.Combine(_storagePath, $"{fileName}.part{chunkIndex}");
+    var chunkFilePath = Path.Combine(_storagePath, $"{ServerTools.CleanDirectoryName(fileName)}.part{chunkIndex}");
+    if(!Directory.Exists(Path.GetDirectoryName(chunkFilePath)))
+    {
+        Directory.CreateDirectory(Path.GetDirectoryName(chunkFilePath));
+    }
 
     using (var stream = new FileStream(chunkFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
     {
@@ -83,7 +88,7 @@ public async Task<IActionResult> UploadFile([FromForm] string text)
 
     System.Console.WriteLine($"Uploaded {fileName} {percentage}%");
 
-    return Ok(new { message = $"Chunk {chunkIndex + 1} uploaded successfully." });
+return Content($"{{\"message\": \"Chunk {chunkIndex + 1} uploaded successfully.\"}}", "application/json");
 }
         public UploadController()
         {

@@ -1,18 +1,92 @@
+using ClownWire.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using QuickTools.QCore;
+using QuickTools.QIO;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace FileStreamingApi.Controllers
 {
+
     [Route("clownwire/[controller]")]
     [ApiController]
     public class StreamController : ControllerBase
     {
-        [HttpGet()]
-        public async Task<IActionResult> StreamFile()
+        [HttpGet]
+        public IActionResult Get()
+        {    
+            string mimeType = ServerTools.GetMimeType("stream");
+            
+            byte[] buffer = ServerTools.GetHtmlBuffer("stream");
+            // Return the index.html file and set the content type as "text/html"
+            // return File("index.html", "text/html");
+            return File(buffer, mimeType);
+        }
+ 
+  [HttpGet("links")]
+public IActionResult GetLinks()
+{
+    // Initialize the FilesMaper to get the files from the specified path
+    FilesMaper maper = new FilesMaper(ServerTools.CloudRootPath);
+    maper.Map();
+
+    // Initialize StringBuilder to construct a JSON response
+    StringBuilder jsonResponse = new StringBuilder();
+    
+    // Start the JSON array
+    jsonResponse.Append("[");
+
+    // Loop through the list of files and add them to the JSON string
+    for (int i = 0; i < maper.Files.Count; i++)
+    {
+        string file = Path.GetFileNameWithoutExtension(maper.Files[i]);
+        string fileName = ServerTools.CleanFileName(file);
+        string fileId = fileName; 
+        if(ServerTools.IsMediaFile(maper.Files[i]))
+        {
+            // Append file details in JSON format
+            jsonResponse.Append("{");
+            jsonResponse.Append($"\"fileName\": \"{fileName}\", ");
+            jsonResponse.Append($"\"fileId\": \"{fileId}\"");
+       
+            // If it's not the last file, add a comma
+            if (i < maper.Files.Count - 1)
+            {
+                jsonResponse.Append("}, ");
+            }
+            else
+            {
+                jsonResponse.Append("}");
+            }
+        }
+    }
+    // End the JSON array
+    jsonResponse.Append("]");
+
+    // Return the JSON string as the response
+    return Content(jsonResponse.ToString(), "application/json");
+}
+
+
+
+        [HttpGet("{fileId}")]
+        public async Task<IActionResult> StreamFile(string fileId)
         {
             // Path to your media file (adjust this to the correct path on your server)
-            string filePath = "wwwroot/src/media/video.mkv";
+            FilesMaper maper = new FilesMaper(ServerTools.CloudRootPath);
+            maper.Map();
+
+            string filePath ="";
+            foreach(string file in maper.Files)
+            {
+                string id = ServerTools.CleanFileName(Path.GetFileNameWithoutExtension(file));
+                //string length = new FileStream(file,FileMode.Open).Length.ToString();
+                if(fileId == id){
+                    filePath = file; 
+                    break;
+                }
+            }
 
             // Check if the file exists
             if (!System.IO.File.Exists(filePath))
@@ -51,7 +125,7 @@ namespace FileStreamingApi.Controllers
                 Response.Headers.Add("Content-Range", $"bytes {start}-{end}/{fileInfo.Length}");
 
                 // Return the file stream with the specified range
-                return new FileStreamResult(fileStream, "video/mkv")
+                return new FileStreamResult(fileStream, ServerTools.GetMimeType(filePath))
                 {
                     EnableRangeProcessing = true,  // This enables range processing for the client (e.g., VLC)
                     FileDownloadName = fileInfo.Name
@@ -60,7 +134,7 @@ namespace FileStreamingApi.Controllers
 
             // If no range is requested, return the whole file
             Response.Headers.Add("Accept-Ranges", "bytes");
-            return new FileStreamResult(fileStream, "video/mkv")
+            return new FileStreamResult(fileStream,  ServerTools.GetMimeType(filePath))
             {
                 FileDownloadName = fileInfo.Name,
             };

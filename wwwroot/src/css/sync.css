@@ -1,0 +1,77 @@
+        /* Global Styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Container for the entire sync process */
+        .container {
+            text-align: center;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px; /* Increased max width for a better view */
+            box-sizing: border-box;
+        }
+
+        /* Sync icon styling */
+        #sync_svg {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        #sync_svg:hover {
+            transform: scale(1.1);
+        }
+
+        /* Warning message text styling */
+        #warning {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        /* Progress bar container styling */
+        .progress-bar {
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            width: 100%;
+            margin-top: 15px;
+            overflow: hidden;
+            display: none; /* Hidden initially */
+        }
+
+        .progress {
+            background-color: #0075ff;
+            height: 100%;
+            width: 0%; /* Start width at 0% */
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        /* Status text */
+        .status {
+            margin: 15px 0;
+            display: none;
+        }
+
+        #sync_status {
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        /* Links styling (hide them initially) */
+        .links {
+            display: none;
+        }

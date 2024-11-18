@@ -14,7 +14,7 @@ namespace ClownWire.Controllers
     [ApiController]
     public class DownloadController : ControllerBase
     {
-        private static string _storagePath = Tools.StoragePath;
+        private static string _storagePath = ServerTools.CloudRootPath;
 
         // Track status and result of tasks using dictionaries
         private static ConcurrentDictionary<string, string> TaskStatus = new ConcurrentDictionary<string, string>();
@@ -25,12 +25,9 @@ namespace ClownWire.Controllers
         [HttpGet()]
         public IActionResult Get()
         {
-            string html, ip;
-            html = System.IO.File.ReadAllText("wwwroot/download.html");
-            ip = Tools.GetLocalIPAddress();
-            html = html.Replace("@ipaddress", $"http://{ip}");
-            byte[] buffer = Encoding.ASCII.GetBytes(html);
-            return File(buffer, "text/html");
+            string mimeType = ServerTools.GetMimeType("download");
+            byte[] buffer = ServerTools.GetHtmlBuffer("download");
+            return File(buffer, mimeType);
         }
 
 
@@ -39,12 +36,10 @@ namespace ClownWire.Controllers
         [HttpGet("isync")]
         public IActionResult ISync()
         {
-            string html, ip;
-            html = System.IO.File.ReadAllText("wwwroot/isync.html");
-            ip = Tools.GetLocalIPAddress();
-            html = html.Replace("@ipaddress", $"http://{ip}");
-            byte[] buffer = Encoding.ASCII.GetBytes(html);
-            return File(buffer, "text/html");
+            string file = "isync";
+            string mimeType = ServerTools.GetMimeType(file);
+            byte[] buffer = ServerTools.GetHtmlBuffer(file);
+            return File(buffer, mimeType);
         }
 
         // New endpoint to start the zip creation process asynchronously
@@ -67,6 +62,7 @@ namespace ClownWire.Controllers
         // Async method to create the zip file
         private async Task CreateZipFileAsync(string taskId)
         {
+            /*
             string zipFileName = "songs.zip";
             string zipFilePath = Path.Combine(_storagePath, zipFileName);
 
@@ -110,12 +106,15 @@ namespace ClownWire.Controllers
                 // If something fails, update the status to failed
                 TaskStatus[taskId] = $"Failed: {ex.Message}";
             }
+            */
         }
 
         // Endpoint to get the status of the zip file creation process
-        [HttpGet("zip-status/{taskId}")]
+       // [HttpGet("zip-status/{taskId}")]
+        /*
         public IActionResult GetZipStatus(string taskId)
         {
+            
             if (TaskStatus.TryGetValue(taskId, out var status))
             {
                 return Ok(new { Status = status });
@@ -136,13 +135,11 @@ namespace ClownWire.Controllers
 
             return NotFound("Zip file not found or task failed.");
         }
-
+*/
         [HttpGet("sync")]
         public IActionResult GetSync()
         {
-            string html, ip, link, file, tag;
-            html = System.IO.File.ReadAllText("wwwroot/sync.html");
-            ip = Tools.GetLocalIPAddress();
+            string mimeType,tag,link,file,html,ip,htmlf;
             StringBuilder songs = new StringBuilder();
             if (!Directory.Exists(_storagePath))
             {
@@ -150,6 +147,7 @@ namespace ClownWire.Controllers
             }
 
             var files = Directory.GetFiles(_storagePath);
+            ip = ServerTools.GetLocalIPAddress();
             foreach (string f in files)
             {
                 file = Path.GetFileName(f);
@@ -157,30 +155,50 @@ namespace ClownWire.Controllers
                 tag = $"<a target=\"{link}\" href=\"{link}\" class=\"links\" download=\"{file}\">{file}</a>";
                 songs.Append(tag);
             }
-
+            htmlf = "sync";
+            html = ServerTools.GetHtmlContent(htmlf);
+            mimeType = ServerTools.GetMimeType(htmlf);
             html = html.Replace("@SongsList", songs.ToString());
             byte[] buffer = Encoding.ASCII.GetBytes(html);
-            return File(buffer, "text/html");
+            return File(buffer, mimeType);
         }
+[HttpGet("filelist")]
+public IActionResult GetFileList()
+{
+    if (!Directory.Exists(_storagePath))
+    {
+        return NotFound("Directory not found.");
+    }
 
-        [HttpGet("filelist")]
-        public IActionResult GetFileList()
-        {
-            if (!Directory.Exists(_storagePath))
-            {
-                return NotFound("Directory not found.");
-            }
+    var files = Directory.GetFiles(_storagePath);
+    var sb = new StringBuilder();
 
-            var files = Directory.GetFiles(_storagePath);
+    // Start the JSON array
+    sb.Append("[");
 
-            var fileDetails = files.Select(file => new
-            {
-                FileName = Path.GetFileName(file),
-                FileSize = Tools.FormatFileSize(new FileInfo(file).Length)
-            }).ToList();
+    // Loop through the files and create JSON for each file
+    foreach (var file in files)
+    {
+        var fileName = Path.GetFileName(file);
+        var fileSize = IGet.FileSize(new FileInfo(file).Length);
+        
+        // Add file details as a JSON object
+        sb.AppendFormat("{{\"FileName\":\"{0}\",\"FileSize\":\"{1}\"}},", fileName, fileSize);
+    }
 
-            return Ok(fileDetails);
-        }
+    // Remove the last comma if there is one
+    if (sb.Length > 1)
+    {
+        sb.Length--; // Remove the last comma
+    }
+
+    // Close the JSON array
+    sb.Append("]");
+
+    // Return the JSON string with application/json content type
+    return Content(sb.ToString(), "application/json");
+}
+
 
         // Download file by name
         [HttpGet("{fileName}")]

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clownwire</title>
+    <link rel="icon" href="@ip/src/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="@ip/src/upload.css">
+</head>
+<body>
+
+    <h1>Clownwire (Upload)</h1>
+
+    <div class="buttons">
+        <input type="file" multiple name="file" id="file" /><br /><br />
+        <input style="display: none;"type="text" name="text" id="text" placeholder="Enter additional text" /><br /><br />
+             <!-- New drag-and-drop area -->
+  <div id="dropArea" class="drop-area">
+    Drag and Drop Files or Folders Here
+</div><br /><br />
+<textarea id="log" readonly></textarea>
+
+        <button type="button" id="upload">Upload</button>
+        <button type="button" id="download"><a href="@ip/clownwire/download/">Download</a></button>
+        <button type="button" id="note"><a href="@ip/clownwire/notes/">Notes</a></button><br /><br />
+
+    </div>
+
+ 
+    <!-- Progress bar -->
+    <progress class="progressBar" id="progressBar" value="0" max="100"></progress><br /><br />
+    <progress class="progressBar" id="progressBar2" value="0" max="100"></progress><br /><br />
+
+    <!-- Log textarea for debug/info -->
+    <textarea id="log" rows="10" cols="50" readonly></textarea>
+
+    <script src="@ip/src/upload.js"></script>
+
+</body>
+</html>

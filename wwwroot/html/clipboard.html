@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clipboard</title>
+    <style>
+        /* Your existing styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .clipboard-container {
+            background-color: #fff;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .clipboard-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .clipboard-item {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 5px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .clipboard-item:hover {
+            background-color: #eef;
+        }
+
+        .copy-success {
+            color: green;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .copy-fail {
+            color: red;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .loading {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .input-container {
+            margin-top: 20px;
+        }
+
+        .input-container input {
+            padding: 10px;
+            width: 80%;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .input-container button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .input-container button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="clipboard-container">
+        <h1>Clipboard</h1>
+
+        <ul class="clipboard-list" id="clipboardList">
+            <!-- Dynamically generated clipboard items will go here -->
+        </ul>
+
+        <div class="copy-success" id="copySuccess"></div>
+        <div class="copy-fail" id="copyFail"></div>
+        <div class="loading" id="loadingMessage">Loading clips...</div>
+
+        <!-- Add new clip input -->
+        <div class="input-container">
+            <input type="text" id="newClipText" placeholder="Add a new clipboard item">
+            <button onclick="addNewClip()">Add Clip</button>
+        </div>
+    </div>
+
+    <script>
+        const baseUrl = "@ip"; // Replace with your actual backend URL
+
+        // Function to fetch saved clips from the server
+        async function fetchSavedClips() {
+            try {
+                const response = await fetch(`${baseUrl}/clownwire/clipboard/GetNotes`);
+                const data = await response.json();
+
+                if (data && Array.isArray(data.clips)) {
+                    const clipboardList = document.getElementById('clipboardList');
+                    clipboardList.innerHTML = ''; // Clear the list before adding new items
+                    
+                    data.clips.forEach(clip => {
+                        const listItem = document.createElement('li');
+                        listItem.classList.add('clipboard-item');
+                        listItem.textContent = clip;
+                        
+                        // Attach click event to copy text to clipboard
+                        listItem.addEventListener('click', () => {
+                            copyToClipboard(clip);
+                        });
+                        
+                        clipboardList.appendChild(listItem);
+                    });
+
+                    document.getElementById('loadingMessage').style.display = 'none'; // Hide loading message
+                } else {
+                    console.error('Invalid data format');
+                    document.getElementById('loadingMessage').textContent = 'Failed to load clips.';
+                }
+            } catch (error) {
+                console.error('Error fetching clips:', error);
+                document.getElementById('loadingMessage').textContent = 'Failed to load clips.';
+            }
+        }
+
+        // Function to copy text to clipboard
+        function copyToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            showCopySuccess(text);
+        }
+
+        // Show success message after copying
+        function showCopySuccess(text) {
+            const successMessage = document.getElementById('copySuccess');
+            successMessage.textContent = `'${text}' copied to clipboard!`;
+            setTimeout(() => {
+                successMessage.textContent = '';
+            }, 2000);
+        }
+
+        // Function to add a new clip (both UI and server)
+        async function addNewClip() {
+            const newClipText = document.getElementById('newClipText').value;
+
+            if (!newClipText.trim()) {
+                alert('Please enter some text for the clipboard!');
+                return;
+            }
+
+            // Add to the UI
+            const clipboardList = document.getElementById('clipboardList');
+            const listItem = document.createElement('li');
+            listItem.classList.add('clipboard-item');
+            listItem.textContent = newClipText;
+            listItem.addEventListener('click', () => {
+                copyToClipboard(newClipText);
+            });
+            clipboardList.appendChild(listItem);
+
+            // Clear the input field
+            document.getElementById('newClipText').value = '';
+
+            // Send to server (to be saved via header)
+            try {
+                const response = await fetch(`${baseUrl}/clownwire/clipboard/Save`, {
+                    method: 'POST',
+                    headers: {
+                        'clip': newClipText,  // Send the clip text via the header
+                    }
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    console.log('Clip saved successfully');
+                    fetchSavedClips(); // Reload the clips after saving
+                } else {
+                    alert('Failed to save the clip.');
+                }
+            } catch (error) {
+                console.error('Error saving the clip:', error);
+                alert('An error occurred while saving the clip.');
+            }
+        }
+
+        // Fetch clips when the page loads
+        window.onload = fetchSavedClips;
+    </script>
+</body>
+</html>

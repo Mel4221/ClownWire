@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clownwire</title>
+    <link rel="icon" href="@ip/src/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="@ip/src/download.css">
+  
+</head>
+<body>
+
+    <h1>Clownwire (Download)</h1>
+
+    <div class="buttons">
+        <!-- Search Bar for Filtering -->
+        <input type="text" id="searchBar" class="search-bar" placeholder="Search files..." />
+        
+        <!-- Select All Checkbox -->
+        <label>
+            <input type="checkbox" id="selectAllCheckbox"> Select All
+        </label>
+
+        <div class="file-list" id="fileList">
+            <!-- Dynamic file list will be inserted here -->
+        </div>
+        
+        <button type="button" id="download" disabled>Download Selected Files</button>
+        <button type="button"><a href="@ip/clownwire/upload" id="upload">Upload</a></button>
+        <button type="button" id="note"><a href="@ip/clownwire/notes/">Notes</a></button><br /><br />
+
+    </div>
+
+    <!-- Progress bar -->
+    <progress id="progressBar" value="0" max="100"></progress><br /><br />
+
+    <!-- Log textarea for debug/info -->
+    <textarea id="log" rows="10" cols="50" readonly></textarea>
+
+    <script src="@ip/src/download.js"></script>
+
+</body>
+</html>

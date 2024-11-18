@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note Saver System</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            background-color: #f4f4f4;
+            height: 100vh;
+        }
+
+        .note-container {
+            display: flex;
+            width: 100%;
+        }
+
+        .note-list {
+            width: 25%;
+            padding: 20px;
+            background-color: #ffffff;
+            border-right: 1px solid #ccc;
+            overflow-y: auto;
+        }
+
+        .note-list label {
+            display: block;
+            margin: 10px 0;
+            cursor: pointer;
+            padding: 5px;
+            background-color: #eee;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .note-list label:hover {
+            background-color: #ddd;
+        }
+
+        .note-detail {
+            width: 75%;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+
+        .note-detail textarea {
+            width: 100%;
+            height: 300px;
+            padding: 10px;
+            font-family: monospace;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .note-detail button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .note-detail button:hover {
+            background-color: #2980b9;
+        }
+
+        .note-detail button:disabled {
+            background-color: #d3d3d3;
+            cursor: not-allowed;
+        }
+
+        .note-detail .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .note-list input[type="text"], .note-detail input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="note-container">
+        <!-- Left Panel: List of Notes -->
+        <div class="note-list">
+            <h2>Notes</h2>
+            <input type="text" id="searchBar" placeholder="Search labels..." />
+            <div id="noteList">
+                <!-- Dynamic note list will appear here -->
+            </div>
+            <button id="addNoteBtn">Add Note</button>
+        </div>
+
+        <!-- Right Panel: Note Detail -->
+        <div class="note-detail">
+            <h2>Note Detail</h2>
+            <label for="noteLabel">Label:</label>
+            <input type="text" id="noteLabel" disabled />
+
+            <label for="noteContent">Content:</label>
+            <textarea id="noteContent"></textarea>
+
+            <div class="action-buttons">
+                <button id="saveNoteBtn" disabled>Save Note</button>
+                <button id="deleteNoteBtn" disabled>Delete Note</button>
+                <button id="copyNoteBtn" disabled>Copy Note</button>
+                <button id="download"><a href="@ip/clownwire/download">Download</a></button>
+                <button id="upload" ><a href="@ip/clownwire/upload">Upload</a></button>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Notes storage (In-memory for simplicity, can be extended with localStorage or backend)
+        let notes = [];
+
+        // DOM elements
+        const noteListDiv = document.getElementById('noteList');
+        const saveNoteBtn = document.getElementById('saveNoteBtn');
+        const deleteNoteBtn = document.getElementById('deleteNoteBtn');
+        const copyNoteBtn = document.getElementById('copyNoteBtn');
+        const noteLabelInput = document.getElementById('noteLabel');
+        const noteContentTextarea = document.getElementById('noteContent');
+        const addNoteBtn = document.getElementById('addNoteBtn');
+        const searchBar = document.getElementById('searchBar');
+
+        // Function to render the note list
+        function renderNoteList() {
+            noteListDiv.innerHTML = ''; // Clear current list
+            notes.forEach((note, index) => {
+                const noteItem = document.createElement('label');
+                noteItem.textContent = note.label;
+                noteItem.addEventListener('click', () => loadNoteDetail(index));
+                noteListDiv.appendChild(noteItem);
+            });
+        }
+
+        // Function to load note detail into the right panel
+        function loadNoteDetail(index) {
+            const note = notes[index];
+            noteLabelInput.value = note.label;
+            noteContentTextarea.value = note.content;
+
+            // Enable buttons for editing/deleting
+            saveNoteBtn.disabled = false;
+            deleteNoteBtn.disabled = false;
+            copyNoteBtn.disabled = false;
+
+            // Add event listener to save the note after editing
+            saveNoteBtn.onclick = () => saveNote(index);
+            deleteNoteBtn.onclick = () => deleteNote(index);
+            copyNoteBtn.onclick = () => copyNoteContent(index);
+        }
+
+        // Function to save the note (edit if already exists)
+        function saveNote(index) {
+            const updatedLabel = noteLabelInput.value;
+            const updatedContent = noteContentTextarea.value;
+
+            if (updatedLabel && updatedContent) {
+                notes[index] = { label: updatedLabel, content: updatedContent };
+                renderNoteList(); // Re-render note list
+                clearNoteDetail(); // Clear the right panel
+            }
+        }
+
+        // Function to delete the note
+        function deleteNote(index) {
+            notes.splice(index, 1); // Remove note from the array
+            renderNoteList(); // Re-render note list
+            clearNoteDetail(); // Clear the right panel
+        }
+
+        // Function to copy note content
+        function copyNoteContent(index) {
+            const note = notes[index];
+            navigator.clipboard.writeText(note.content)
+                .then(() => alert('Note content copied to clipboard!'))
+                .catch(err => alert('Failed to copy content: ' + err));
+        }
+
+        // Function to clear the note detail panel
+        function clearNoteDetail() {
+            noteLabelInput.value = '';
+            noteContentTextarea.value = '';
+            saveNoteBtn.disabled = true;
+            deleteNoteBtn.disabled = true;
+            copyNoteBtn.disabled = true;
+        }
+
+        // Function to add a new note
+        addNoteBtn.addEventListener('click', () => {
+            const newNote = { label: 'New Note', content: '' };
+            notes.push(newNote);
+            renderNoteList(); // Re-render note list
+        });
+
+        // Search functionality for filtering notes by label
+        searchBar.addEventListener('input', () => {
+            const searchQuery = searchBar.value.toLowerCase();
+            const filteredNotes = notes.filter(note =>
+                note.label.toLowerCase().includes(searchQuery)
+            );
+            noteListDiv.innerHTML = '';
+            filteredNotes.forEach((note, index) => {
+                const noteItem = document.createElement('label');
+                noteItem.textContent = note.label;
+                noteItem.addEventListener('click', () => loadNoteDetail(index));
+                noteListDiv.appendChild(noteItem);
+            });
+        });
+
+        // Initial render
+        renderNoteList();
+    </script>
+
+</body>
+</html>

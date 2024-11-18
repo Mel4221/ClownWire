@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QuickTools.QCore;
+using QuickTools.QIO;
 using System.IO;
 using System.Text; 
 using System.Threading.Tasks;
@@ -12,31 +13,33 @@ namespace ClownWire.Controllers
     [ApiController]    
     public class SrcController: ControllerBase
     {
-        [HttpGet("{fileName}")]
+    [HttpGet("{fileName}")]
      public IActionResult GetSrc(string fileName)
 {
-       string file = Tools.GetFile(fileName);
-    if(!System.IO.File.Exists(file))return NotFound($"{fileName}");
-    // Get the file content and MIME type
-    string html = System.IO.File.ReadAllText(file);
-    string ip = Tools.GetLocalIPAddress();
-    string mimeType = Tools.GetMimeType(fileName);
+       string file = ServerTools.GetFilePath(fileName);
+       //IGet.Red($"FILE: {file}");
+       string ext = IGet.FileExention(file);
+         //     IGet.Red($"EXT: {ext}");
 
+    if(!ServerTools.Exists(file))return NotFound($"{file}");
+    // Get the file content and MIME type
+    string mimeType = ServerTools.GetMimeType(file);
+    //IGet.Red($"MIME_TYPE: {mimeType}");
+    
     // Check if the MIME type indicates binary data (e.g., image, video, PDF, etc.)
-    if (Tools.IsBinaryMimeType(mimeType))
+    if (ext == "js"||ext=="html"||ext=="css")
     {
-        // For binary files, just return the file as is (without modifying the content)
-        byte[] fileBytes = System.IO.File.ReadAllBytes(Tools.GetFile(fileName));
-        return File(fileBytes, mimeType);
+      // Convert the modified HTML to a byte array and return
+          
+        byte[] buffer =  ServerTools.GetContentBuffer(file);
+        return File(buffer, mimeType);
     }
     else
     {
-        // For text-based files (HTML, JS, CSS, etc.), replace the placeholder
-        html = html.Replace("@ipaddress", $"http://{ip}");
-
-        // Convert the modified HTML to a byte array and return
-        byte[] buffer = Encoding.ASCII.GetBytes(html);
-        return File(buffer, mimeType);
+                // For binary files, just return the file as is (without modifying the content)
+        byte[] fileBytes = System.IO.File.ReadAllBytes(file);
+        return File(fileBytes, mimeType);
+      
     }
 }
 

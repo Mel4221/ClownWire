@@ -1,0 +1,64 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+h1 {
+    text-align: center;
+}
+.search-container {
+    margin-bottom: 20px;
+    text-align: center;
+}
+#searchInput {
+    padding: 10px;
+    width: 200px;
+    font-size: 16px;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+.list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.list-item {
+    padding: 10px;
+    margin: 5px 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    width: 300px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+.list-item:hover {
+    background-color: #e1f5fe;
+}
+.list-item:active {
+    background-color: #bbdefb;
+}
+.list-item {
+padding: 10px;
+margin: 5px 0;
+background-color: #fff;
+border: 1px solid #ddd;
+width: 300px; /* You can adjust this based on your needs */
+text-align: left;
+cursor: pointer;
+border-radius: 5px;
+transition: background-color 0.3s ease;
+overflow: hidden; /* Ensure the content doesn't overflow the container */
+white-space: nowrap; /* Prevent the text from wrapping to the next line */
+text-overflow: ellipsis; /* Add '...' if the text overflows */
+}
+
+.list-item:hover {
+background-color: #e1f5fe;
+}
+
+.list-item:active {
+background-color: #bbdefb;
+}

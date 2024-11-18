@@ -4,17 +4,26 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+    <PublishTrimmed>true</PublishTrimmed> <!-- Optional: Trim unused code for smaller size -->
+    <PublishAot>true</PublishAot>
+
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-  </ItemGroup>
 
  <ItemGroup>
      <Reference Include="DllrefrenceFile">
-       <HintPath>QuickTools.dll</HintPath>
+       <HintPath>../QuickTools/bin/Release/QuickTools.dll</HintPath>
      </Reference>
+ </ItemGroup>
+ 
+ <ItemGroup>
+  <Content Include="wwwroot/*" CopyToPublishDirectory="PreserveNewest" />
+</ItemGroup>
+ 
+ <ItemGroup>
+   <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+   <PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
  </ItemGroup>
 
 </Project>

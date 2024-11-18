@@ -48,7 +48,7 @@ namespace UShare
             app.UseCors("AllowAnyOrigin");
 
             // Serve the index.html file at root ("/")
-            app.MapGet("/", () => Results.File("wwwroot/index.html"));
+            //app.MapGet("/", () => Results.File());
 
             // Authorization middleware (optional)
             app.UseAuthorization();

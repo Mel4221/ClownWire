@@ -10,11 +10,12 @@ namespace ClownWire.Controllers
     [ApiController]
     public class NotesController : ControllerBase
     {
-        private static string _storagePath = Tools.StoragePath;
+        private static string _storagePath = ServerTools.CloudRootPath;
 
         [HttpGet()]
         public IActionResult Download()
-        {
+        {   
+            /*
             string html,ip;
             html = System.IO.File.ReadAllText("wwwroot/notes.html");
             ip = Tools.GetLocalIPAddress();
@@ -24,12 +25,15 @@ namespace ClownWire.Controllers
             // Return the index.html file and set the content type as "text/html"
             // return File("index.html", "text/html");
             return File(buffer, "text/html");
-
+            */
+            return Ok("Pending not completed yet...");
         }
 
 [HttpGet("filelist")]
 public IActionResult GetFileList()
 {
+            return Ok("Pending not completed yet...");
+    /*
     // Ensure the directory exists
     if (!Directory.Exists(_storagePath))
     {
@@ -48,6 +52,7 @@ public IActionResult GetFileList()
 
     // Return the list of file details as a JSON response
     return Ok(fileDetails);
+    */
 }
 
 
@@ -56,6 +61,9 @@ public IActionResult GetFileList()
        [HttpGet("{fileName}")]
         public IActionResult DownloadFile(string fileName)
         {
+                        return Ok("Pending not completed yet...");
+
+            /*
             var filePath = Path.Combine(_storagePath, fileName);
             
             if (!System.IO.File.Exists(filePath))
@@ -67,6 +75,7 @@ public IActionResult GetFileList()
 
             // Stream the file directly to the client
             return File(fileStream, "application/octet-stream", fileName);
+            */
         }
 
     }
