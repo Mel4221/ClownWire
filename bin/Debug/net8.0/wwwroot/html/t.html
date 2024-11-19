@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directory Upload with Drag-and-Drop</title>
+    <style>
+        #dropZone {
+            width: 300px;
+            height: 200px;
+            border: 2px dashed #aaa;
+            text-align: center;
+            line-height: 200px;
+            color: #aaa;
+            cursor: pointer;
+        }
+        #dropZone.drag {
+            background-color: #f0f0f0;
+        }
+        #result {
+            margin-top: 20px;
+        }
+        #result ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="dropZone">Drag and Drop Folder Here</div>
+    <div id="result">
+        <ul></ul>
+    </div>
+    
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const result = document.getElementById('log');
+        
+        dropZone.addEventListener('dragover', function(event) {
+            event.preventDefault();
+            dropZone.classList.add('drag');
+        });
+
+        dropZone.addEventListener('dragleave', function() {
+            dropZone.classList.remove('drag');
+        });
+
+        dropZone.addEventListener('drop', function(event) {
+            event.preventDefault();
+            dropZone.classList.remove('drag');
+            
+            const items = event.dataTransfer.items;
+            processItems(items);
+        });
+
+        // Function to process items (files and directories)
+        function processItems(items) {
+            for (let i = 0; i < items.length; i++) {
+                const entry = items[i].webkitGetAsEntry ? items[i].webkitGetAsEntry() : null;
+                if (entry) {
+                    handleEntry(entry);
+                }
+            }
+        }
+
+        // Handle a directory or file entry
+        function handleEntry(entry) {
+            if (entry.isDirectory) {
+                // Handle directory
+                const dirPath = entry.fullPath || entry.webkitRelativePath;
+                const dirItem = document.createElement('li');
+                dirItem.textContent = `Directory: ${dirPath}`;
+                result.querySelector('ul').appendChild(dirItem);
+                
+                // Read the directory recursively
+                const reader = entry.createReader();
+                reader.readEntries(entries => {
+                    entries.forEach(handleEntry);  // Recurse into subdirectories
+                });
+            } else if (entry.isFile) {
+                // Handle file
+                entry.file(function(file) {
+                    const fileItem = document.createElement('li');
+                    fileItem.innerHTML = `File: ${file.name}<br>Size: ${file.size} bytes<br>Path: ${file.webkitRelativePath || file.name}`;
+                    result.querySelector('ul').appendChild(fileItem);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -13,6 +13,29 @@ namespace ClownWire.Controllers
     [ApiController]    
     public class SrcController: ControllerBase
     {
+    
+    [HttpGet("cloud/{fileName}")]
+    public IActionResult GetCloud(string fileName)
+    {
+
+      FilesMaper maper = new FilesMaper(ServerTools.CloudRootPath);
+      FileStream fileStream;
+      string file,fileId; 
+      maper.Map(); 
+      for(int item = 0; item < maper.Files.Count; item++)
+      {
+           
+          file = maper.Files[item]; 
+          fileStream = new FileStream(file,FileMode.Open,FileAccess.Read);
+          fileId = fileStream.Length.ToString();
+          if(fileId == fileName)
+          {
+            return File(fileStream,ServerTools.GetMimeType(file));
+          }
+      }
+      return NotFound(fileName);
+
+    }
     [HttpGet("{fileName}")]
      public IActionResult GetSrc(string fileName)
 {

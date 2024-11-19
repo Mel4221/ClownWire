@@ -1,0 +1,118 @@
+   /* Basic Reset */
+   * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.buttons {
+    margin: 20px 0;
+}
+
+/* Center the progress bar */
+#progressBar {
+    display: none;
+    width: 80%;
+    margin: 20px auto;
+    height: 20px;
+    background-color: #f3f3f3;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#progressBar::-webkit-progress-bar {
+    background-color: #f3f3f3;
+}
+
+#progressBar::-webkit-progress-value {
+    background-color: #3498db;
+}
+
+#progressBar::-moz-progress-bar {
+    background-color: #3498db;
+}
+
+textarea {
+    width: 80%;
+    margin-top: 20px;
+    padding: 10px;
+    resize: none;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 200px;
+    font-family: monospace;
+    color: #333;
+    background-color: #fff;
+}
+
+input[type="file"], input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #3498db;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+button:disabled {
+    background-color: #d3d3d3;
+    cursor: not-allowed;
+}
+
+.file-list {
+    width: 80%;
+    margin: 20px auto;
+    text-align: left;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 10px;
+}
+
+.file-list label {
+    display: block;
+    margin: 5px 0;
+    cursor: pointer;
+}
+
+.file-list input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+#log {
+    display: none;
+}
+
+/* Search Bar Styling */
+.search-bar {
+    width: 80%;
+    margin: 20px auto;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}

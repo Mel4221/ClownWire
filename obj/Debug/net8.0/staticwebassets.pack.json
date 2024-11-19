@@ -1,0 +1,125 @@
+{
+  "Files": [
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/html/clipboard.html",
+      "PackagePath": "staticwebassets/html/clipboard.html"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/html/clownwire.html",
+      "PackagePath": "staticwebassets/html/clownwire.html"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/html/download.html",
+      "PackagePath": "staticwebassets/html/download.html"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/html/isync.html",
+      "PackagePath": "staticwebassets/html/isync.html"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/html/notes.html",
+      "PackagePath": "staticwebassets/html/notes.html"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/html/player.html",
+      "PackagePath": "staticwebassets/html/player.html"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/html/stream.html",
+      "PackagePath": "staticwebassets/html/stream.html"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/html/sync.html",
+      "PackagePath": "staticwebassets/html/sync.html"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/html/t.html",
+      "PackagePath": "staticwebassets/html/t.html"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/html/upload.html",
+      "PackagePath": "staticwebassets/html/upload.html"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/html/you.html",
+      "PackagePath": "staticwebassets/html/you.html"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/src/css/download.css",
+      "PackagePath": "staticwebassets/src/css/download.css"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/src/css/player.css",
+      "PackagePath": "staticwebassets/src/css/player.css"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/src/css/stream.css",
+      "PackagePath": "staticwebassets/src/css/stream.css"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/src/css/style.css",
+      "PackagePath": "staticwebassets/src/css/style.css"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/src/css/sync.css",
+      "PackagePath": "staticwebassets/src/css/sync.css"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/src/css/upload.css",
+      "PackagePath": "staticwebassets/src/css/upload.css"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/src/img/favicon.ico",
+      "PackagePath": "staticwebassets/src/img/favicon.ico"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/src/js/download.js",
+      "PackagePath": "staticwebassets/src/js/download.js"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/src/js/player.js",
+      "PackagePath": "staticwebassets/src/js/player.js"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/src/js/script.js",
+      "PackagePath": "staticwebassets/src/js/script.js"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/src/js/stream.js",
+      "PackagePath": "staticwebassets/src/js/stream.js"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/src/js/sync.js",
+      "PackagePath": "staticwebassets/src/js/sync.js"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/src/js/upload.js",
+      "PackagePath": "staticwebassets/src/js/upload.js"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/src/js/upload1.js",
+      "PackagePath": "staticwebassets/src/js/upload1.js"
+    },
+    {
+      "Id": "/home/mel/Documents/csharp/ClownWire/wwwroot/src/js/upload2.js",
+      "PackagePath": "staticwebassets/src/js/upload2.js"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.ClownWire.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.ClownWire.props",
+      "PackagePath": "build\\ClownWire.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.ClownWire.props",
+      "PackagePath": "buildMultiTargeting\\ClownWire.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.ClownWire.props",
+      "PackagePath": "buildTransitive\\ClownWire.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

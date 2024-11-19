@@ -1,1 +1,1 @@
-scp -rv bin/Debug/net8.0/* mel@192.168.8.100:/home/mel/www/ClownWire/
+scp -rv bin/Debug/net8.0/* mel@192.168.8.10$1:/home/mel/www/ClownWire/

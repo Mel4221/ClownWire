@@ -18,11 +18,18 @@
  </ItemGroup>
  
  <ItemGroup>
+     <Reference Include="DllrefrenceFile">
+       <HintPath>../Newtonsoft.Json-13.0.3/bin/Bin/net45/Newtonsoft.Json.dll</HintPath>
+     </Reference>
+ </ItemGroup>
+
+ <ItemGroup>
   <Content Include="wwwroot/*" CopyToPublishDirectory="PreserveNewest" />
 </ItemGroup>
- 
+
+
  <ItemGroup>
-   <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+   <!--PackageReference Include="Newtonsoft.Json" Version="13.0.3" /-->
    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
  </ItemGroup>
 
