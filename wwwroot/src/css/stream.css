@@ -53,6 +53,7 @@ transition: background-color 0.3s ease;
 overflow: hidden; /* Ensure the content doesn't overflow the container */
 white-space: nowrap; /* Prevent the text from wrapping to the next line */
 text-overflow: ellipsis; /* Add '...' if the text overflows */
+height:25px;
 }
 
 .list-item:hover {

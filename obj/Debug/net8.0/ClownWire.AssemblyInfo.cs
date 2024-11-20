@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ClownWire")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3a433148c55a5ff5174d5389c05b68eea15d2551")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5abf55f150f35a0e239ef4c8ad12a0603d133ea3")]
 [assembly: System.Reflection.AssemblyProductAttribute("ClownWire")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ClownWire")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

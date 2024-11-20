@@ -30,7 +30,10 @@ public IActionResult GetLinks()
     // Initialize the FilesMaper to get the files from the specified path
     FilesMaper maper = new FilesMaper(ServerTools.CloudRootPath);
     maper.Map();
-
+    
+    List<string> files = maper.Files
+    .Where(file => ServerTools.IsMediaFile(file))
+    .ToList();
     // Initialize StringBuilder to construct a JSON response
     StringBuilder jsonResponse = new StringBuilder();
     
@@ -38,20 +41,19 @@ public IActionResult GetLinks()
     jsonResponse.Append("[");
 
     // Loop through the list of files and add them to the JSON string
-    for (int i = 0; i < maper.Files.Count; i++)
+    for (int i = 0; i < files.Count; i++)
     {
-        string file = Path.GetFileNameWithoutExtension(maper.Files[i]);
+        string file = Path.GetFileNameWithoutExtension(files[i]);
         string fileName = ServerTools.CleanFileName(file);
         string fileId = fileName; 
-        if(ServerTools.IsMediaFile(maper.Files[i]))
-        {
+       
             // Append file details in JSON format
             jsonResponse.Append("{");
             jsonResponse.Append($"\"fileName\": \"{fileName}\", ");
             jsonResponse.Append($"\"fileId\": \"{fileId}\"");
-       
+
             // If it's not the last file, add a comma
-            if (i < maper.Files.Count - 1)
+            if (i < files.Count-1)
             {
                 jsonResponse.Append("}, ");
             }
@@ -59,7 +61,7 @@ public IActionResult GetLinks()
             {
                 jsonResponse.Append("}");
             }
-        }
+        
     }
     // End the JSON array
     jsonResponse.Append("]");
